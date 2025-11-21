@@ -12,7 +12,8 @@ import time
 
 
 # Configuration
-API_BASE_URL = "http://localhost:8000"
+# For Streamlit Cloud, set BACKEND_URL in secrets
+API_BASE_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
 
 # Page configuration
 st.set_page_config(
