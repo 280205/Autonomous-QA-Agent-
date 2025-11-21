@@ -1,0 +1,514 @@
+{
+  "api_version": "1.0",
+  "base_url": "https://api.eshop.example.com",
+  "description": "API endpoints for E-Shop Checkout system. This is a mock API specification for testing purposes.",
+  "authentication": {
+    "type": "Bearer Token",
+    "header": "Authorization",
+    "format": "Bearer {token}"
+  },
+  "endpoints": [
+    {
+      "endpoint": "/api/products",
+      "method": "GET",
+      "description": "Retrieve list of available products",
+      "authentication_required": false,
+      "parameters": [],
+      "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "example": {
+          "products": [
+            {
+              "id": 1,
+              "name": "Wireless Headphones",
+              "price": 79.99,
+              "stock": 100,
+              "category": "Electronics"
+            },
+            {
+              "id": 2,
+              "name": "Smart Watch",
+              "price": 199.99,
+              "stock": 50,
+              "category": "Electronics"
+            },
+            {
+              "id": 3,
+              "name": "Bluetooth Speaker",
+              "price": 49.99,
+              "stock": 75,
+              "category": "Electronics"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "endpoint": "/api/cart/add",
+      "method": "POST",
+      "description": "Add a product to the shopping cart",
+      "authentication_required": false,
+      "request_body": {
+        "content_type": "application/json",
+        "required_fields": ["product_id", "quantity"],
+        "schema": {
+          "product_id": {
+            "type": "integer",
+            "description": "Unique identifier of the product",
+            "example": 1
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "Number of items to add",
+            "minimum": 1,
+            "maximum": 99,
+            "example": 2
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "example": {
+          "success": true,
+          "message": "Product added to cart",
+          "cart_item": {
+            "product_id": 1,
+            "product_name": "Wireless Headphones",
+            "quantity": 2,
+            "unit_price": 79.99,
+            "subtotal": 159.98
+          }
+        }
+      },
+      "error_responses": [
+        {
+          "status": 400,
+          "description": "Invalid product ID or quantity",
+          "example": {
+            "success": false,
+            "error": "Invalid quantity. Must be between 1 and 99"
+          }
+        },
+        {
+          "status": 404,
+          "description": "Product not found",
+          "example": {
+            "success": false,
+            "error": "Product not found"
+          }
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/cart/update",
+      "method": "PUT",
+      "description": "Update quantity of a cart item",
+      "authentication_required": false,
+      "request_body": {
+        "content_type": "application/json",
+        "required_fields": ["product_id", "quantity"],
+        "schema": {
+          "product_id": {
+            "type": "integer",
+            "description": "Unique identifier of the product",
+            "example": 1
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "New quantity (0 to remove)",
+            "minimum": 0,
+            "maximum": 99,
+            "example": 3
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "example": {
+          "success": true,
+          "message": "Cart updated",
+          "cart_item": {
+            "product_id": 1,
+            "quantity": 3,
+            "subtotal": 239.97
+          }
+        }
+      }
+    },
+    {
+      "endpoint": "/api/cart/remove",
+      "method": "DELETE",
+      "description": "Remove a product from the cart",
+      "authentication_required": false,
+      "request_body": {
+        "content_type": "application/json",
+        "required_fields": ["product_id"],
+        "schema": {
+          "product_id": {
+            "type": "integer",
+            "description": "Unique identifier of the product to remove",
+            "example": 1
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "example": {
+          "success": true,
+          "message": "Product removed from cart"
+        }
+      }
+    },
+    {
+      "endpoint": "/api/discount/validate",
+      "method": "POST",
+      "description": "Validate and apply discount code",
+      "authentication_required": false,
+      "request_body": {
+        "content_type": "application/json",
+        "required_fields": ["code"],
+        "schema": {
+          "code": {
+            "type": "string",
+            "description": "Discount code to validate",
+            "example": "SAVE15"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "example": {
+          "success": true,
+          "valid": true,
+          "discount_type": "percentage",
+          "discount_value": 15,
+          "message": "Discount code applied! 15% off your order."
+        }
+      },
+      "error_responses": [
+        {
+          "status": 200,
+          "description": "Invalid discount code",
+          "example": {
+            "success": true,
+            "valid": false,
+            "message": "Invalid discount code."
+          }
+        }
+      ],
+      "notes": [
+        "Valid discount code: SAVE15 (case-insensitive)",
+        "Discount value: 15% off subtotal",
+        "Only one discount code per order"
+      ]
+    },
+    {
+      "endpoint": "/api/shipping/calculate",
+      "method": "POST",
+      "description": "Calculate shipping cost based on selected method",
+      "authentication_required": false,
+      "request_body": {
+        "content_type": "application/json",
+        "required_fields": ["shipping_method"],
+        "schema": {
+          "shipping_method": {
+            "type": "string",
+            "enum": ["standard", "express"],
+            "description": "Selected shipping method",
+            "example": "express"
+          },
+          "subtotal": {
+            "type": "number",
+            "description": "Order subtotal for calculation",
+            "example": 329.97
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "example": {
+          "success": true,
+          "shipping_method": "express",
+          "shipping_cost": 10.00,
+          "estimated_delivery": "1-2 business days"
+        }
+      },
+      "shipping_rules": {
+        "standard": {
+          "cost": 0.00,
+          "delivery_time": "5-7 business days"
+        },
+        "express": {
+          "cost": 10.00,
+          "delivery_time": "1-2 business days"
+        }
+      }
+    },
+    {
+      "endpoint": "/api/order/calculate",
+      "method": "POST",
+      "description": "Calculate order totals including all discounts and fees",
+      "authentication_required": false,
+      "request_body": {
+        "content_type": "application/json",
+        "required_fields": ["cart_items", "shipping_method"],
+        "schema": {
+          "cart_items": {
+            "type": "array",
+            "description": "Array of cart items",
+            "example": [
+              {
+                "product_id": 1,
+                "quantity": 2,
+                "unit_price": 79.99
+              }
+            ]
+          },
+          "discount_code": {
+            "type": "string",
+            "description": "Optional discount code",
+            "example": "SAVE15"
+          },
+          "shipping_method": {
+            "type": "string",
+            "enum": ["standard", "express"],
+            "description": "Selected shipping method",
+            "example": "standard"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "example": {
+          "success": true,
+          "subtotal": 159.98,
+          "discount_amount": 23.997,
+          "shipping_cost": 0.00,
+          "total": 135.98,
+          "breakdown": {
+            "items_total": 159.98,
+            "discount_applied": true,
+            "discount_percentage": 15,
+            "shipping_method": "standard"
+          }
+        }
+      }
+    },
+    {
+      "endpoint": "/api/order/submit",
+      "method": "POST",
+      "description": "Submit order for processing",
+      "authentication_required": false,
+      "request_body": {
+        "content_type": "application/json",
+        "required_fields": ["customer_info", "cart_items", "shipping_method", "payment_method"],
+        "schema": {
+          "customer_info": {
+            "type": "object",
+            "required_fields": ["name", "email", "address"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Customer full name",
+                "example": "John Doe"
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "description": "Customer email address",
+                "example": "john.doe@example.com"
+              },
+              "phone": {
+                "type": "string",
+                "description": "Customer phone number (optional)",
+                "example": "+1-555-0123"
+              },
+              "address": {
+                "type": "string",
+                "description": "Shipping address",
+                "example": "123 Main St, Anytown, ST 12345"
+              }
+            }
+          },
+          "cart_items": {
+            "type": "array",
+            "description": "Array of cart items",
+            "minimum_items": 1,
+            "example": [
+              {
+                "product_id": 1,
+                "quantity": 2
+              }
+            ]
+          },
+          "discount_code": {
+            "type": "string",
+            "description": "Applied discount code (optional)",
+            "example": "SAVE15"
+          },
+          "shipping_method": {
+            "type": "string",
+            "enum": ["standard", "express"],
+            "description": "Selected shipping method",
+            "example": "standard"
+          },
+          "payment_method": {
+            "type": "string",
+            "enum": ["credit-card", "paypal"],
+            "description": "Selected payment method",
+            "example": "credit-card"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "example": {
+          "success": true,
+          "message": "Payment Successful! Thank you for your order.",
+          "order_id": "ORD-2025-001234",
+          "order_total": 135.98,
+          "estimated_delivery": "5-7 business days"
+        }
+      },
+      "error_responses": [
+        {
+          "status": 400,
+          "description": "Validation error",
+          "example": {
+            "success": false,
+            "error": "Validation failed",
+            "details": {
+              "email": "Please enter a valid email address",
+              "cart": "Cart cannot be empty"
+            }
+          }
+        },
+        {
+          "status": 422,
+          "description": "Missing required fields",
+          "example": {
+            "success": false,
+            "error": "Missing required fields",
+            "missing_fields": ["name", "email", "address"]
+          }
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/validate/email",
+      "method": "POST",
+      "description": "Validate email format",
+      "authentication_required": false,
+      "request_body": {
+        "content_type": "application/json",
+        "required_fields": ["email"],
+        "schema": {
+          "email": {
+            "type": "string",
+            "description": "Email address to validate",
+            "example": "user@example.com"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "content_type": "application/json",
+        "example": {
+          "success": true,
+          "valid": true,
+          "message": "Email format is valid"
+        }
+      },
+      "validation_rules": [
+        "Must contain @ symbol",
+        "Must have domain extension",
+        "Must not have spaces",
+        "Must follow standard email format: user@domain.ext"
+      ]
+    }
+  ],
+  "data_models": {
+    "Product": {
+      "id": "integer",
+      "name": "string",
+      "price": "number (decimal)",
+      "stock": "integer",
+      "category": "string"
+    },
+    "CartItem": {
+      "product_id": "integer",
+      "product_name": "string",
+      "quantity": "integer (1-99)",
+      "unit_price": "number (decimal)",
+      "subtotal": "number (decimal)"
+    },
+    "CustomerInfo": {
+      "name": "string (required)",
+      "email": "string (required, email format)",
+      "phone": "string (optional)",
+      "address": "string (required)"
+    },
+    "Order": {
+      "order_id": "string",
+      "customer_info": "CustomerInfo object",
+      "cart_items": "array of CartItem",
+      "subtotal": "number (decimal)",
+      "discount_amount": "number (decimal)",
+      "shipping_cost": "number (decimal)",
+      "total": "number (decimal)",
+      "shipping_method": "string (standard/express)",
+      "payment_method": "string (credit-card/paypal)",
+      "status": "string",
+      "created_at": "datetime"
+    }
+  },
+  "business_logic": {
+    "discount_codes": {
+      "SAVE15": {
+        "type": "percentage",
+        "value": 15,
+        "description": "15% off entire order",
+        "case_sensitive": false,
+        "expiry": null,
+        "usage_limit": null
+      }
+    },
+    "shipping_costs": {
+      "standard": 0.00,
+      "express": 10.00
+    },
+    "validation_rules": {
+      "name": "Cannot be empty",
+      "email": "Must be valid email format with @ and domain",
+      "address": "Cannot be empty",
+      "cart": "Must contain at least one item",
+      "quantity": "Must be between 1 and 99"
+    },
+    "calculation_order": [
+      "1. Calculate subtotal (sum of all cart items)",
+      "2. Apply discount to subtotal (if valid code provided)",
+      "3. Add shipping cost based on selected method",
+      "4. Final total = subtotal - discount + shipping"
+    ]
+  },
+  "error_codes": {
+    "400": "Bad Request - Invalid input data",
+    "404": "Not Found - Resource not found",
+    "422": "Unprocessable Entity - Missing required fields",
+    "500": "Internal Server Error - Server error"
+  },
+  "notes": [
+    "This is a mock API specification for testing purposes",
+    "No actual API implementation exists",
+    "Used for generating test cases and understanding system behavior",
+    "All responses are simulated client-side in the HTML page"
+  ]
+}

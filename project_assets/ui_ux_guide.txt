@@ -1,0 +1,490 @@
+# UI/UX Design Guidelines - E-Shop Checkout
+
+## Version: 1.0
+## Last Updated: November 2025
+
+---
+
+## Design Philosophy
+
+The E-Shop Checkout interface must provide a clean, intuitive, and user-friendly experience that guides customers through the purchase process with minimal friction. All design decisions should prioritize clarity, accessibility, and ease of use.
+
+---
+
+## Color Scheme
+
+### Primary Colors
+
+**Success Green - #4CAF50**
+- Used for: Positive actions, success messages, total price display
+- Applications: "Add to Cart" buttons, "Pay Now" button, success message background
+- Hover state: #45a049 (slightly darker)
+
+**Error Red - #f44336**
+- Used for: Error messages, validation errors, destructive actions
+- Applications: Form validation errors, "Remove" buttons
+- Hover state: #da190b (darker red)
+
+**Info Blue - #2196F3**
+- Used for: Informational actions, secondary buttons
+- Applications: "Apply Discount" button
+- Hover state: #0b7dda (darker blue)
+
+### Neutral Colors
+
+**Background Colors:**
+- Page background: #f5f5f5 (light gray)
+- Container background: #ffffff (white)
+- Cart section background: #f9f9f9 (very light gray)
+- Cart item background: #ffffff (white)
+
+**Text Colors:**
+- Primary text: #333 (dark gray)
+- Secondary text: #444 (medium gray)
+- Price text: #4CAF50 (success green)
+- Disabled text: #999 (light gray)
+
+**Border Colors:**
+- Default borders: #ddd (light gray)
+- Hover borders: #ccc (medium gray)
+- Focus borders: #4CAF50 (success green)
+- Item borders: #e0e0e0 (very light gray)
+
+---
+
+## Typography
+
+### Font Family
+- Primary font: Arial, sans-serif
+- Fallback: System default sans-serif
+
+### Font Sizes
+- Page heading (h1): 32px (default browser size)
+- Section headings (h2): 24px (default browser size)
+- Product name: 18px, bold
+- Product price: 20px
+- Cart item text: 16px (default)
+- Button text: 14px
+- Total price: 22px, bold
+- Form labels: 14px, bold
+- Form inputs: 14px
+- Error messages: 12px
+- Success message: 20px
+
+### Font Weights
+- Normal text: 400 (normal)
+- Headings and labels: bold
+- Product names: bold
+- Prices: normal (20px size provides emphasis)
+- Total price: bold
+
+---
+
+## Layout and Spacing
+
+### Container
+- Maximum width: 1200px
+- Centered on page
+- White background
+- Padding: 30px
+- Border radius: 8px
+- Box shadow: 0 2px 10px rgba(0,0,0,0.1)
+
+### Section Spacing
+- Page heading margin bottom: 30px
+- Section heading margin top: 30px
+- Section heading margin bottom: 15px
+- Section heading has bottom border: 2px solid #4CAF50
+
+### Grid Layout
+- Products section: CSS Grid
+- Columns: Auto-fit with minimum 250px width
+- Gap between products: 20px
+- Responsive to screen size
+
+---
+
+## Component Design Guidelines
+
+### Product Cards
+
+**Visual Design:**
+- Border: 1px solid #ddd
+- Border radius: 8px
+- Padding: 20px
+- Text alignment: center
+- Background: white
+
+**Hover Effect:**
+- Transform: translateY(-5px) - card lifts up
+- Box shadow: 0 4px 8px rgba(0,0,0,0.1)
+- Transition: 0.2s ease
+
+**Content Structure:**
+1. Product name (top)
+2. Price (middle, green color)
+3. "Add to Cart" button (bottom, green)
+
+### Buttons
+
+**Primary Buttons (Green):**
+- Background: #4CAF50
+- Text color: white
+- Padding: 10px 20px (standard), 15px (large buttons)
+- Border radius: 5px (standard), 4px (form buttons)
+- Border: none
+- Cursor: pointer
+- Hover background: #45a049
+- Transition: background-color 0.3s
+
+**Secondary Buttons (Blue):**
+- Background: #2196F3
+- Same styling as primary but with blue color
+- Used for "Apply Discount" button
+
+**Destructive Buttons (Red):**
+- Background: #f44336
+- Used for "Remove" actions
+- Padding: 5px 15px (smaller)
+- Hover background: #da190b
+
+**Disabled State:**
+- Background: #ccc
+- Cursor: not-allowed
+- No hover effect
+
+### Cart Items
+
+**Layout:**
+- Display: flex
+- Justify content: space-between
+- Align items: center
+- Padding: 15px
+- Background: white
+- Margin bottom: 10px
+- Border radius: 5px
+- Border: 1px solid #e0e0e0
+
+**Content Distribution:**
+- Item name: flex 1, left aligned
+- Item price: flex 1, center aligned, green color
+- Quantity controls: flex 1, center aligned
+- Remove button: right aligned
+
+### Form Elements
+
+**Input Fields:**
+- Width: 100% of container
+- Padding: 10px
+- Border: 1px solid #ddd
+- Border radius: 4px
+- Font size: 14px
+
+**Focus State:**
+- Outline: none
+- Border color: #4CAF50 (green)
+- Smooth transition
+
+**Text Areas:**
+- Same styling as input fields
+- Rows: 3 (for address field)
+
+**Radio Buttons:**
+- Display in horizontal groups
+- Gap between options: 20px
+- Label beside radio button
+- Gap between radio and label: 5px
+
+### Error Messages
+
+**Styling:**
+- Color: #f44336 (red)
+- Font size: 12px
+- Margin top: 5px
+- Display: none (hidden by default)
+
+**When Shown:**
+- Display: block
+- Appears immediately below the invalid field
+- Class "show" added to make visible
+
+**Error Text Examples:**
+- "Name is required"
+- "Please enter a valid email address"
+- "Address is required"
+
+### Success Message
+
+**Styling:**
+- Background: #4CAF50 (green)
+- Text color: white
+- Padding: 20px
+- Border radius: 8px
+- Text alignment: center
+- Font size: 20px
+- Margin top: 20px
+- Display: none (hidden by default)
+
+**When Shown:**
+- Display: block
+- Appears at top of container
+- Page scrolls to top smoothly
+- Form is hidden
+
+---
+
+## Interactive Behavior
+
+### Hover Effects
+
+**Product Cards:**
+- Slight upward movement (translateY(-5px))
+- Enhanced shadow
+- Smooth transition (0.2s)
+
+**Buttons:**
+- Darker background color
+- Smooth color transition (0.3s)
+- Cursor changes to pointer
+
+**Input Fields:**
+- Border color changes on focus
+- No hover effect on inputs
+
+### Click Feedback
+- All buttons should have cursor: pointer
+- Visual feedback through hover state
+- No additional click animation needed
+
+### Transitions
+- Button color changes: 0.3s
+- Product card hover: 0.2s
+- All transitions should use smooth easing
+
+---
+
+## Validation and Feedback
+
+### Inline Validation
+- Errors appear directly below the relevant field
+- Error text in red (#f44336)
+- Error messages are specific and helpful
+- Validation occurs on form submission, not on blur
+
+### Success Feedback
+- Success message fills width of container
+- Prominent green background
+- Large, bold text
+- Centered alignment
+
+### Discount Code Feedback
+- Message appears below discount input section
+- Green text (#4CAF50) for success
+- Red text (#f44336) for errors
+- Font size: 14px
+
+---
+
+## Accessibility Guidelines
+
+### Color Contrast
+- All text must have sufficient contrast with background
+- Error messages in red must be readable
+- Success messages in white on green must be clear
+
+### Interactive Elements
+- All clickable elements must have cursor: pointer
+- Focus states must be visible (green border)
+- All form fields must have labels
+
+### Form Usability
+- Labels positioned above inputs
+- Required fields marked with asterisk (*)
+- Error messages clearly associated with fields
+- Logical tab order through form
+
+---
+
+## Responsive Design
+
+### Breakpoints
+- Products grid adapts automatically (auto-fit)
+- Minimum column width: 250px
+- Container has max-width: 1200px
+- Padding adjusts for mobile: 20px on page
+
+### Mobile Considerations
+- Single column layout on small screens (automatic via grid)
+- Touch-friendly button sizes (minimum 44px height)
+- Readable font sizes on mobile
+- No horizontal scrolling
+
+---
+
+## Cart Display Guidelines
+
+### Empty Cart State
+- Center-aligned message
+- Padding: 40px
+- Gray color: #999
+- Font size: 18px
+- Message: "Your cart is empty"
+
+### Cart Summary Section
+- Display: flex layout
+- Space between label and value
+- Padding: 15px
+- White background
+- Border radius: 5px
+- Font size: 18px, bold
+- Margin top: 20px for spacing
+
+### Total Price Emphasis
+- Larger font size: 22px
+- Bold weight
+- Green color: #4CAF50
+- Visually distinct from other prices
+
+---
+
+## Section Organization
+
+### Visual Hierarchy
+1. Page Title (h1) - centered, prominent
+2. Section Headings (h2) - left-aligned, green underline
+3. Content sections - clearly separated
+4. Form fields - grouped logically
+
+### Section Borders
+- Section headings have bottom border
+- Border: 2px solid #4CAF50
+- Padding bottom: 10px
+- Creates clear visual separation
+
+---
+
+## Button Styling Reference
+
+### "Add to Cart" Buttons
+- Background: #4CAF50 (green)
+- Text: white
+- Padding: 10px 20px
+- Border radius: 5px
+- Full width within product card
+- Hover: #45a049
+
+### "Apply Discount" Button
+- Background: #2196F3 (blue)
+- Text: white
+- Padding: 10px 20px
+- Border radius: 4px
+- Hover: #0b7dda
+
+### "Remove" Buttons
+- Background: #f44336 (red)
+- Text: white
+- Padding: 5px 15px
+- Border radius: 4px
+- Hover: #da190b
+
+### "Pay Now" Button
+- Background: #4CAF50 (green)
+- Text: white
+- Padding: 15px
+- Border radius: 4px
+- Width: 100%
+- Font size: 18px
+- Font weight: bold
+- Margin top: 20px
+- Hover: #45a049
+- Disabled: #ccc background
+
+---
+
+## Price Display Guidelines
+
+### Price Formatting
+- Currency symbol: $ (dollar sign)
+- Always two decimal places: XX.XX
+- Consistent format across all prices
+- Green color (#4CAF50) for price emphasis
+
+### Price Location and Style
+- Product prices: centered below product name, size 20px
+- Cart item prices: center-aligned in cart item row
+- Subtotal, discount, shipping, total: right-aligned in summary
+- Total price: larger (22px), bold, green
+
+---
+
+## Form Validation Visual Feedback
+
+### Invalid Field State
+- Border color remains default (red border not added)
+- Error message appears below field in red
+- Field label remains unchanged
+- Focus border still shows green
+
+### Valid Field State
+- No special styling
+- Error message hidden
+- Normal border color (#ddd)
+
+### Required Field Indicator
+- Asterisk (*) after label text
+- Included in label itself
+- Examples: "Full Name *", "Email Address *"
+
+---
+
+## Discount Section Design
+
+### Layout
+- Display: flex
+- Gap: 10px
+- Aligned items: center
+- Margin: 20px 0
+
+### Input Field
+- Flex: 1 (takes remaining space)
+- Placeholder: "Enter discount code"
+
+### Button
+- Fixed width (auto)
+- Positioned beside input
+
+### Message Display
+- Below the input/button row
+- Margin top: 5px
+- Font size: 14px
+- Color changes based on success/error
+
+---
+
+## Scroll and Animation
+
+### Smooth Scrolling
+- On successful submission, page scrolls to top
+- Behavior: smooth (not instant)
+- Used via: window.scrollTo({ top: 0, behavior: 'smooth' })
+
+### Animations
+- Hover transitions: 0.2s to 0.3s
+- No loading spinners required
+- No complex animations
+- Focus on smooth, subtle effects
+
+---
+
+## Best Practices Summary
+
+1. Use consistent spacing throughout (padding, margins)
+2. Maintain visual hierarchy with font sizes and weights
+3. Provide clear visual feedback for all interactions
+4. Use color purposefully (green=success, red=error, blue=info)
+5. Ensure all clickable elements look clickable
+6. Display prices consistently in green
+7. Show error messages in context (near the field)
+8. Make buttons large and easy to click
+9. Keep layout clean and uncluttered
+10. Test all interactive states (hover, focus, disabled)
