@@ -1,0 +1,15 @@
+# Streamlit Configuration for Cloud Deployment
+
+[server]
+port = 8501
+enableCORS = false
+enableXsrfProtection = true
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+primaryColor = "#4CAF50"
+backgroundColor = "#0e1117"
+secondaryBackgroundColor = "#1a1a1a"
+textColor = "#ffffff"

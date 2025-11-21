@@ -1,0 +1,29 @@
+# Ultra-Minimal Backend Requirements for Render Free Tier
+# Uses OpenAI embeddings instead of sentence-transformers (no PyTorch!)
+
+# Core Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# LLM Provider
+openai==1.3.0
+
+# Vector Database (minimal)
+chromadb==0.4.18
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Document Processing
+PyPDF2==3.0.1
+python-docx==1.1.0
+beautifulsoup4==4.12.2
+
+# Utilities
+python-dotenv==1.0.0
+httpx==0.25.2
+requests==2.31.0
+typing-extensions==4.8.0
+
+# Required by ChromaDB (minimal deps)
+onnxruntime==1.16.3
