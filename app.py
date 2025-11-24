@@ -527,6 +527,7 @@ def build_knowledge_base(reset=False):
         f"{API_BASE_URL}/build-knowledge-base",
         params={"reset": reset}
     )
+    response.raise_for_status()  # Raise exception for bad status codes
     return response.json()
 
 
@@ -785,6 +786,13 @@ def show_document_upload_page():
                     st.session_state.kb_built = True
                     time.sleep(1)
                     st.rerun()
+                except requests.exceptions.HTTPError as e:
+                    error_detail = "Unknown error"
+                    try:
+                        error_detail = e.response.json().get('detail', str(e))
+                    except:
+                        error_detail = str(e)
+                    st.error(f"Error building knowledge base: {error_detail}")
                 except Exception as e:
                     st.error(f"Error building knowledge base: {str(e)}")
     
@@ -797,6 +805,13 @@ def show_document_upload_page():
                     st.session_state.kb_built = True
                     time.sleep(1)
                     st.rerun()
+                except requests.exceptions.HTTPError as e:
+                    error_detail = "Unknown error"
+                    try:
+                        error_detail = e.response.json().get('detail', str(e))
+                    except:
+                        error_detail = str(e)
+                    st.error(f"Error rebuilding knowledge base: {error_detail}")
                 except Exception as e:
                     st.error(f"Error rebuilding knowledge base: {str(e)}")
     
