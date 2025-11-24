@@ -1,0 +1,94 @@
+╔══════════════════════════════════════════════════════════════════╗
+║                  🚀 STREAMLIT CLOUD DEPLOYMENT                   ║
+║                        Quick Reference                           ║
+╚══════════════════════════════════════════════════════════════════╝
+
+✅ CODE PUSHED TO GITHUB: https://github.com/280205/Autonomous-QA-Agent-
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 STEP-BY-STEP DEPLOYMENT:
+
+1️⃣  GO TO STREAMLIT CLOUD
+    → https://share.streamlit.io/
+    → Sign in with GitHub
+
+2️⃣  CREATE NEW APP
+    → Click "New app"
+    → Repository: 280205/Autonomous-QA-Agent-
+    → Branch: master
+    → Main file: app.py
+
+3️⃣  ADVANCED SETTINGS
+    → Python version: 3.11
+    → Add secrets (paste this):
+
+    OPENAI_API_KEY = "sk-your-key-here"
+    BACKEND_URL = "http://localhost:8000"
+
+4️⃣  DEPLOY
+    → Click "Deploy!"
+    → Wait 3-5 minutes
+    → Your app will be live!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 OPTIMIZATIONS MADE:
+
+✅ Removed emojis (professional look)
+✅ Button-based navigation (user-friendly)
+✅ Subtle colors (not gaudy)
+✅ Lightweight requirements (~50MB vs 900MB)
+✅ OpenAI embeddings (no PyTorch needed)
+✅ All functionality preserved
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📦 BUILD SIZE COMPARISON:
+
+BEFORE: ~900MB ❌ (Too large for free tier)
+├─ PyTorch: ~700MB
+├─ sentence-transformers: ~100MB
+└─ Other ML libs: ~100MB
+
+AFTER: ~50-80MB ✅ (Perfect for free tier!)
+├─ OpenAI: ~5MB
+├─ ChromaDB: ~20MB
+├─ FastAPI: ~10MB
+└─ Streamlit: ~15MB
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💰 COST:
+
+• Streamlit Cloud: FREE (1GB RAM, 1 CPU)
+• Backend: FREE (runs locally during dev)
+• OpenAI API: ~$0.0001/1K tokens (~$1-5/month)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 WHAT'S INCLUDED:
+
+✅ Document upload & processing
+✅ Knowledge base with vector search
+✅ AI test case generation
+✅ Selenium script generation
+✅ Dashboard with analytics
+✅ Modern glassmorphic UI
+✅ Subtle navigation buttons
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔥 YOUR APP URL (after deployment):
+    https://[your-app-name].streamlit.app
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❓ NEED HELP?
+   → Read: DEPLOYMENT_STREAMLIT.md (detailed guide)
+   → Check Streamlit logs if errors occur
+   → Verify OpenAI API key is correct
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎉 Ready to deploy! Follow the 4 steps above.
