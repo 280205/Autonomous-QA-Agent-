@@ -24,7 +24,7 @@ class Config:
     
     # Model Names
     OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
-    GROQ_MODEL: str = os.getenv("GROQ_MODEL", "mixtral-8x7b-32768")
+    GROQ_MODEL: str = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")  # Updated to current model
     OLLAMA_MODEL: str = os.getenv("OLLAMA_MODEL", "llama2")
     
     # Embedding Model
