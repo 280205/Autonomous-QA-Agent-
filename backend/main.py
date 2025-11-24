@@ -84,25 +84,41 @@ async def root():
 async def health_check():
     """Health check endpoint"""
     try:
-        # Validate configuration
-        Config.validate_config()
+        # Try to validate configuration
+        config_valid = False
+        config_error = None
+        try:
+            Config.validate_config()
+            config_valid = True
+        except Exception as e:
+            config_error = str(e)
         
         # Check vector DB
-        stats = vector_db.get_collection_stats()
-        
-        return {
-            "status": "healthy",
-            "llm_provider": Config.LLM_PROVIDER,
-            "vector_db": {
+        try:
+            stats = vector_db.get_collection_stats()
+            db_status = {
                 "connected": True,
                 "documents": stats.get("count", 0)
             }
+        except Exception as e:
+            db_status = {
+                "connected": False,
+                "error": str(e)
+            }
+        
+        # Return status (200 OK even if config needs attention)
+        return {
+            "status": "running",
+            "config_valid": config_valid,
+            "config_error": config_error,
+            "llm_provider": Config.LLM_PROVIDER,
+            "vector_db": db_status
         }
     except Exception as e:
         return JSONResponse(
             status_code=500,
             content={
-                "status": "unhealthy",
+                "status": "error",
                 "error": str(e)
             }
         )
