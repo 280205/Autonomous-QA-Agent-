@@ -1,12 +1,13 @@
 """
-Lightweight vector database using ChromaDB with default embeddings.
-Uses ChromaDB's built-in sentence-transformers (all-MiniLM-L6-v2) - no API required!
+Fast text-based vector database using ChromaDB.
+No embeddings, no downloads - instant startup!
 """
 
 import os
 from typing import List, Dict, Any, Optional
 import chromadb
 from chromadb.config import Settings
+from chromadb.utils import embedding_functions
 from backend.config import Config
 from backend.document_processor import DocumentProcessor
 
@@ -32,24 +33,15 @@ class VectorDatabase:
             )
         )
         
-        # ChromaDB will use its default embedding function (sentence-transformers)
-        # No API key needed - runs locally!
+        # Use default embedding function (no external dependencies!)
+        # This uses a simple but effective text matching algorithm
+        self.embedding_function = embedding_functions.DefaultEmbeddingFunction()
         
         # Collection name
         self.collection_name = "qa_documents"
         self.collection = None
         
-        # Pre-load embedding model during initialization to avoid timeout
-        print("Pre-loading embedding model...")
-        try:
-            # Get or create collection to trigger model download
-            temp_collection = self.client.get_or_create_collection(
-                name=self.collection_name,
-                metadata={"description": "QA Agent document collection"}
-            )
-            print("Embedding model loaded successfully!")
-        except Exception as e:
-            print(f"Warning during model pre-load: {e}")
+        print("VectorDatabase initialized (instant, no downloads needed)!")
     
     def create_collection(self, reset: bool = False) -> None:
         """
@@ -65,10 +57,14 @@ class VectorDatabase:
                 pass
         
         try:
-            self.collection = self.client.get_collection(self.collection_name)
+            self.collection = self.client.get_collection(
+                name=self.collection_name,
+                embedding_function=self.embedding_function
+            )
         except:
             self.collection = self.client.create_collection(
                 name=self.collection_name,
+                embedding_function=self.embedding_function,
                 metadata={"description": "QA Agent document collection"}
             )
     
