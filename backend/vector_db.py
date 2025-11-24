@@ -1,13 +1,12 @@
 """
-Lightweight vector database using ChromaDB with OpenAI embeddings.
-This version avoids heavy dependencies like sentence-transformers/PyTorch.
+Lightweight vector database using ChromaDB with default embeddings.
+Uses ChromaDB's built-in sentence-transformers (all-MiniLM-L6-v2) - no API required!
 """
 
 import os
 from typing import List, Dict, Any, Optional
 import chromadb
 from chromadb.config import Settings
-from openai import OpenAI
 from backend.config import Config
 from backend.document_processor import DocumentProcessor
 
@@ -33,38 +32,12 @@ class VectorDatabase:
             )
         )
         
-        # Initialize OpenAI client for embeddings
-        self.openai_client = OpenAI(api_key=Config.OPENAI_API_KEY)
-        self.embedding_model = "text-embedding-3-small"  # Lightweight and fast
+        # ChromaDB will use its default embedding function (sentence-transformers)
+        # No API key needed - runs locally!
         
         # Collection name
         self.collection_name = "qa_documents"
         self.collection = None
-    
-    def _generate_embeddings(self, texts: List[str]) -> List[List[float]]:
-        """
-        Generate embeddings using OpenAI API.
-        
-        Args:
-            texts: List of texts to embed
-            
-        Returns:
-            List of embedding vectors
-        """
-        # OpenAI has a limit of 2048 texts per request
-        batch_size = 2048
-        all_embeddings = []
-        
-        for i in range(0, len(texts), batch_size):
-            batch = texts[i:i + batch_size]
-            response = self.openai_client.embeddings.create(
-                input=batch,
-                model=self.embedding_model
-            )
-            embeddings = [item.embedding for item in response.data]
-            all_embeddings.extend(embeddings)
-        
-        return all_embeddings
     
     def create_collection(self, reset: bool = False) -> None:
         """
@@ -139,12 +112,11 @@ class VectorDatabase:
                     chunk_counter += 1
         
         if all_chunks:
-            # Generate embeddings using OpenAI
-            embeddings = self._generate_embeddings(all_chunks)
+            # ChromaDB will auto-generate embeddings using its default function
+            # No need to manually generate embeddings!
             
             # Add to collection
             self.collection.add(
-                embeddings=embeddings,
                 documents=all_chunks,
                 metadatas=all_metadatas,
                 ids=all_ids
@@ -174,12 +146,11 @@ class VectorDatabase:
         
         top_k = top_k or Config.TOP_K_RESULTS
         
-        # Generate query embedding using OpenAI
-        query_embedding = self._generate_embeddings([query])[0]
+        # ChromaDB will auto-generate query embedding - just pass the text!
         
         # Search
         results = self.collection.query(
-            query_embeddings=[query_embedding],
+            query_texts=[query],
             n_results=top_k,
             where=filter_metadata
         )
