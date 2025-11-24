@@ -181,6 +181,21 @@ async def build_knowledge_base(reset: bool = False):
     Processes all files in the upload directory and creates vector embeddings.
     """
     try:
+        # If reset is True, delete all uploaded files and vector database
+        if reset:
+            # Delete uploaded files
+            if os.path.exists(Config.UPLOAD_DIR):
+                shutil.rmtree(Config.UPLOAD_DIR)
+                os.makedirs(Config.UPLOAD_DIR)
+            
+            # Delete vector database
+            vector_db.delete_collection()
+            
+            return StatusResponse(
+                status="success",
+                message="Knowledge base and uploaded documents have been reset to 0"
+            )
+        
         # Ensure directories exist
         os.makedirs(Config.UPLOAD_DIR, exist_ok=True)
         os.makedirs(Config.CHROMA_DB_PATH, exist_ok=True)
@@ -204,7 +219,7 @@ async def build_knowledge_base(reset: bool = False):
             )
         
         # Create or reset collection
-        vector_db.create_collection(reset=reset)
+        vector_db.create_collection(reset=False)
         
         # Process and add documents
         documents = []

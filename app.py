@@ -798,11 +798,12 @@ def show_document_upload_page():
     
     with col2:
         if st.button("Rebuild (Reset)", use_container_width=True):
-            with st.spinner("Rebuilding knowledge base..."):
+            with st.spinner("Resetting knowledge base and deleting all files..."):
                 try:
                     result = build_knowledge_base(reset=True)
-                    st.success(f"{result['message']}")
-                    st.session_state.kb_built = True
+                    st.success(f"✅ {result['message']}")
+                    st.info("All uploaded documents and knowledge base have been cleared. You can now upload new documents.")
+                    st.session_state.kb_built = False
                     time.sleep(1)
                     st.rerun()
                 except requests.exceptions.HTTPError as e:
@@ -811,9 +812,9 @@ def show_document_upload_page():
                         error_detail = e.response.json().get('detail', str(e))
                     except:
                         error_detail = str(e)
-                    st.error(f"Error rebuilding knowledge base: {error_detail}")
+                    st.error(f"Error resetting knowledge base: {error_detail}")
                 except Exception as e:
-                    st.error(f"Error rebuilding knowledge base: {str(e)}")
+                    st.error(f"Error resetting knowledge base: {str(e)}")
     
     st.markdown("---")
     
