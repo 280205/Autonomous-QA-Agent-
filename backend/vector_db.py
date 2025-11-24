@@ -1,72 +1,36 @@
 """
-Fast text-based vector database using ChromaDB.
-No embeddings, no downloads - instant startup!
+Simple text-based search database - no embeddings, no downloads!
+Uses basic keyword matching for instant startup.
 """
 
 import os
+import re
 from typing import List, Dict, Any, Optional
-import chromadb
-from chromadb.config import Settings
-from chromadb.utils import embedding_functions
+from collections import defaultdict
 from backend.config import Config
 from backend.document_processor import DocumentProcessor
 
 
 class VectorDatabase:
-    """Manage vector database operations for document storage and retrieval"""
+    """Simple text search database - no embeddings needed!"""
     
     def __init__(self, persist_directory: str = None):
-        """
-        Initialize vector database.
-        
-        Args:
-            persist_directory: Directory to persist the database
-        """
+        """Initialize simple text search database."""
         self.persist_directory = persist_directory or Config.CHROMA_DB_PATH
+        os.makedirs(self.persist_directory, exist_ok=True)
         
-        # Initialize ChromaDB client
-        self.client = chromadb.PersistentClient(
-            path=self.persist_directory,
-            settings=Settings(
-                anonymized_telemetry=False,
-                allow_reset=True
-            )
-        )
-        
-        # Use default embedding function (no external dependencies!)
-        # This uses a simple but effective text matching algorithm
-        self.embedding_function = embedding_functions.DefaultEmbeddingFunction()
-        
-        # Collection name
+        # In-memory storage - simple and fast!
+        self.documents = []  # List of {id, text, metadata}
         self.collection_name = "qa_documents"
-        self.collection = None
+        self.collection = self
         
         print("VectorDatabase initialized (instant, no downloads needed)!")
     
     def create_collection(self, reset: bool = False) -> None:
-        """
-        Create or get collection.
-        
-        Args:
-            reset: If True, delete existing collection and create new one
-        """
+        """Create or reset collection."""
         if reset:
-            try:
-                self.client.delete_collection(self.collection_name)
-            except:
-                pass
-        
-        try:
-            self.collection = self.client.get_collection(
-                name=self.collection_name,
-                embedding_function=self.embedding_function
-            )
-        except:
-            self.collection = self.client.create_collection(
-                name=self.collection_name,
-                embedding_function=self.embedding_function,
-                metadata={"description": "QA Agent document collection"}
-            )
+            self.documents = []
+        self.collection = self
     
     def add_documents(
         self,
@@ -120,15 +84,13 @@ class VectorDatabase:
                     chunk_counter += 1
         
         if all_chunks:
-            # ChromaDB will auto-generate embeddings using its default function
-            # No need to manually generate embeddings!
-            
-            # Add to collection
-            self.collection.add(
-                documents=all_chunks,
-                metadatas=all_metadatas,
-                ids=all_ids
-            )
+            # Store in memory
+            for i, chunk in enumerate(all_chunks):
+                self.documents.append({
+                    'id': all_ids[i],
+                    'text': chunk,
+                    'metadata': all_metadatas[i]
+                })
         
         return len(all_chunks)
     
@@ -154,66 +116,44 @@ class VectorDatabase:
         
         top_k = top_k or Config.TOP_K_RESULTS
         
-        # ChromaDB will auto-generate query embedding - just pass the text!
+        # Simple keyword-based search - instant and effective!
+        query_lower = query.lower()
+        query_words = set(re.findall(r'\w+', query_lower))
         
-        # Search
-        results = self.collection.query(
-            query_texts=[query],
-            n_results=top_k,
-            where=filter_metadata
-        )
-        
-        # Format results
-        formatted_results = []
-        
-        if results and results['documents'] and len(results['documents'][0]) > 0:
-            for i in range(len(results['documents'][0])):
-                formatted_results.append({
-                    "content": results['documents'][0][i],
-                    "metadata": results['metadatas'][0][i],
-                    "distance": results['distances'][0][i] if 'distances' in results else None
+        # Score documents by keyword overlap
+        scored_docs = []
+        for doc in self.documents:
+            text_lower = doc['text'].lower()
+            text_words = set(re.findall(r'\w+', text_lower))
+            
+            # Calculate overlap score
+            overlap = len(query_words & text_words)
+            if overlap > 0:
+                scored_docs.append({
+                    'content': doc['text'],
+                    'metadata': doc['metadata'],
+                    'score': overlap,
+                    'distance': 1.0 / (1.0 + overlap)  # Lower is better
                 })
         
-        return formatted_results
+        # Sort by score (higher is better) and return top_k
+        scored_docs.sort(key=lambda x: x['score'], reverse=True)
+        return scored_docs[:top_k]
     
     def get_all_documents(self) -> List[Dict[str, Any]]:
-        """Get all documents from the collection"""
-        if not self.collection:
-            return []
-        
-        results = self.collection.get()
-        
-        formatted_results = []
-        if results and results['documents']:
-            for i in range(len(results['documents'])):
-                formatted_results.append({
-                    "id": results['ids'][i],
-                    "content": results['documents'][i],
-                    "metadata": results['metadatas'][i] if results['metadatas'] else {}
-                })
-        
-        return formatted_results
+        """Get all documents"""
+        return [{'id': doc['id'], 'content': doc['text'], 'metadata': doc['metadata']} 
+                for doc in self.documents]
     
     def delete_collection(self) -> None:
         """Delete the collection"""
-        try:
-            self.client.delete_collection(self.collection_name)
-            self.collection = None
-        except:
-            pass
+        self.documents = []
+        self.collection = None
     
     def get_collection_stats(self) -> Dict[str, Any]:
         """Get statistics about the collection"""
-        if not self.collection:
-            return {
-                "exists": False,
-                "count": 0
-            }
-        
-        count = self.collection.count()
-        
         return {
-            "exists": True,
-            "count": count,
+            "exists": len(self.documents) > 0,
+            "count": len(self.documents),
             "name": self.collection_name
         }
