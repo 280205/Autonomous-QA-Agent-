@@ -178,6 +178,10 @@ async def build_knowledge_base(reset: bool = False):
     Processes all files in the upload directory and creates vector embeddings.
     """
     try:
+        # Ensure directories exist
+        os.makedirs(Config.UPLOAD_DIR, exist_ok=True)
+        os.makedirs(Config.CHROMA_DB_PATH, exist_ok=True)
+        
         # Check if documents exist
         if not os.path.exists(Config.UPLOAD_DIR):
             raise HTTPException(

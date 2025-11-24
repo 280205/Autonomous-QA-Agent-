@@ -31,14 +31,14 @@ class Config:
     EMBEDDING_MODEL: str = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
     
     # Vector Database
-    CHROMA_DB_PATH: str = os.getenv("CHROMA_DB_PATH", "./chroma_db")
+    CHROMA_DB_PATH: str = os.getenv("CHROMA_DB_PATH", "/tmp/chroma_db" if os.path.exists("/tmp") else "./chroma_db")
     
     # Server Configuration
     BACKEND_HOST: str = os.getenv("BACKEND_HOST", "0.0.0.0")
     BACKEND_PORT: int = int(os.getenv("BACKEND_PORT", "8000"))
     
     # File Upload Settings
-    UPLOAD_DIR: str = "./uploaded_docs"
+    UPLOAD_DIR: str = os.getenv("UPLOAD_DIR", "/tmp/uploaded_docs" if os.path.exists("/tmp") else "./uploaded_docs")
     MAX_FILE_SIZE: int = 10 * 1024 * 1024  # 10MB
     ALLOWED_EXTENSIONS: set = {".txt", ".md", ".json", ".pdf", ".html", ".htm"}
     
