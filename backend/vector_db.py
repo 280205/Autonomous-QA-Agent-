@@ -38,6 +38,18 @@ class VectorDatabase:
         # Collection name
         self.collection_name = "qa_documents"
         self.collection = None
+        
+        # Pre-load embedding model during initialization to avoid timeout
+        print("Pre-loading embedding model...")
+        try:
+            # Get or create collection to trigger model download
+            temp_collection = self.client.get_or_create_collection(
+                name=self.collection_name,
+                metadata={"description": "QA Agent document collection"}
+            )
+            print("Embedding model loaded successfully!")
+        except Exception as e:
+            print(f"Warning during model pre-load: {e}")
     
     def create_collection(self, reset: bool = False) -> None:
         """

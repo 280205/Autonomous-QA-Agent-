@@ -37,24 +37,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize components
+# Initialize components (embedding model will be pre-loaded during VectorDatabase init)
+print("Initializing backend components...")
 vector_db = VectorDatabase()
 llm_handler = LLMHandler()
 test_case_agent = TestCaseAgent(vector_db, llm_handler)
 selenium_agent = SeleniumScriptAgent(vector_db, llm_handler)
-
-
-# Startup event to pre-load embedding model
-@app.on_event("startup")
-async def startup_event():
-    """Pre-load the embedding model to avoid timeout on first request"""
-    try:
-        print("Warming up embedding model...")
-        # Create a dummy collection to trigger model download
-        vector_db.create_collection()
-        print("Embedding model ready!")
-    except Exception as e:
-        print(f"Warning: Could not pre-load embedding model: {e}")
+print("Backend initialization complete!")
 
 
 # Pydantic models
